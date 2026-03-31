@@ -17,7 +17,8 @@ export default async function LocaleLayout({
   children: ReactNode;
   params: { locale: string };
 }) {
-  const messages = (await import(`../../messages/${params.locale}.json`)).default;
+  const localeMessages = await import(`../../messages/${params.locale}.json`);
+  const messages = localeMessages.default ?? localeMessages;
 
   return (
     <html lang={params.locale} suppressHydrationWarning>

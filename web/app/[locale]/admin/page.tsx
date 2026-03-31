@@ -29,7 +29,7 @@ export default function AdminPage() {
         return;
       }
       const userId = sessionData.session.user.id;
-      const { data: profileData } = await supabase.from<Profile>('profiles').select('*').eq('id', userId).single();
+      const { data: profileData } = await supabase.from('profiles').select('*').eq('id', userId).single();
       if (!profileData) {
         setMessage('Admin profile not found.');
         setLoading(false);
@@ -49,7 +49,7 @@ export default function AdminPage() {
   }, [locale, router]);
 
   async function loadUsers() {
-    const { data, error } = await supabase.from<Profile>('profiles').select('*').order('role', { ascending: true });
+    const { data, error } = await supabase.from('profiles').select('*').order('role', { ascending: true });
     if (error) {
       setMessage(error.message);
       return;
@@ -58,7 +58,7 @@ export default function AdminPage() {
   }
 
   async function loadDevices() {
-    const { data, error } = await supabase.from<Device>('devices').select('*').order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('devices').select('*').order('created_at', { ascending: false });
     if (error) {
       setMessage(error.message);
       return;
@@ -88,10 +88,6 @@ export default function AdminPage() {
       }
     } else {
       setMessage('User created, but profile was not created automatically.');
-      return;
-    }
-    if (profileError) {
-      setMessage(profileError.message);
       return;
     }
     setForm({ email: '', password: '', role: 'user' });

@@ -59,7 +59,7 @@ export default function DashboardPage() {
 
       const userId = sessionData.session.user.id;
       const { data: profileData, error: profileError } = await supabase
-        .from<Profile>('profiles')
+        .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
@@ -97,7 +97,7 @@ export default function DashboardPage() {
   }, []);
 
   async function loadDevices(userId: string, isAdmin?: boolean) {
-    const query = supabase.from<Device>('devices').select('*').order('created_at', { ascending: false });
+    const query = supabase.from('devices').select('*').order('created_at', { ascending: false });
     if (!isAdmin) query.eq('owner_id', userId);
     const { data, error } = await query;
     if (error) {
@@ -118,7 +118,7 @@ export default function DashboardPage() {
     userId?: string
   ) {
     if (!deviceId) return;
-    let query = supabase.from<Reading>('readings').select('*').eq('device_id', deviceId).order('recorded_at', { ascending: false }).limit(500);
+    let query = supabase.from('readings').select('*').eq('device_id', deviceId).order('recorded_at', { ascending: false }).limit(500);
     if (fromDate) query = query.gte('recorded_at', new Date(fromDate).toISOString());
     if (toDate) query = query.lte('recorded_at', new Date(toDate).toISOString());
     const { data, error } = await query;
