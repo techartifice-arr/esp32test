@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Providers } from '@/app/providers';
 
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 export const generateStaticParams = async () => [
   { locale: 'en' },
@@ -10,14 +11,21 @@ export const generateStaticParams = async () => [
   { locale: 'zh' },
 ];
 
+const localeMessagesLoaders = {
+  en: () => import('../../messages/en.json'),
+  my: () => import('../../messages/my.json'),
+  th: () => import('../../messages/th.json'),
+  zh: () => import('../../messages/zh.json'),
+} as const;
+
 export default async function LocaleLayout({
   children,
   params,
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: { locale: keyof typeof localeMessagesLoaders };
 }) {
-  const localeMessages = await import(`../../messages/${params.locale}.json`);
+  const localeMessages = await localeMessagesLoaders[params.locale]();
   const messages = localeMessages.default ?? localeMessages;
 
   return (
